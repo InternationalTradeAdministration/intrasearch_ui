@@ -1,0 +1,48 @@
+#searchContainer .App {
+  text-align: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  font-family: Source Sans Pro,Helvetica Neue,Helvetica,Roboto,Arial,sans-serif;
+
+  p.searchMessage {
+    margin-top: 1em;
+    padding-left: 1em;
+    .searchMessageKeyword {
+      color: #268078;
+      font-size: 1.2em;
+    }
+  }
+
+  div > form {
+    background-color: #f1f1f1;
+    border-bottom: 1px solid #e5e5e5;
+    padding: 1em 0 1em 0;
+    width: 100vw;
+  
+    input {
+      display: initial;
+      width: 30vw;
+      line-height: 40px;
+      font-size: 1em;
+      padding: 0 8px;
+      border: 2px solid #268078;
+    }
+    button {
+      display: initial;
+      background-color: #268078;
+      border: 2px solid #268078;
+      color: #fff;
+      vertical-align: top;
+      align-content: center;
+      width: 40px;
+      height: 44px;
+      right: 5px;
+    }
+
+    svg {
+      height: 39px;
+      align-self: center;
+    }
+  }
+}

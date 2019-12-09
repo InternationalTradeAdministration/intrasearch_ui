@@ -1,0 +1,43 @@
+#searchContainer .ResultsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: center;
+  min-width: 250px;
+
+  p.totalMessage {
+    align-self: flex-start;
+    margin-left: 1.5em;
+    margin-bottom: 0.5em;
+    margin-top: 0.5em;
+  }
+
+  .pagination {
+    flex-basis: 100%;
+    width: 20px;
+    line-height: 2em;
+
+    li {
+      display: inline-block;
+      list-style-type: none;
+      line-height: inherit;
+
+      &.active {
+        background-color: #268078;
+        a {
+          color: white;
+          text-decoration: none;
+        }
+      }
+      
+      a {
+        position: relative;
+        padding: 6px 12px;
+        color: #268078;
+        text-decoration: none;
+        border: 1px solid #ddd;
+        margin: 0 0 0 -1px;
+      }
+    }
+  }
+}
