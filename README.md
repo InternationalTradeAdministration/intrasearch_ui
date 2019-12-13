@@ -21,8 +21,11 @@ In another terminal tab, launch tests with `npm run test`.
 2. Add the following lines to the `<head>` of the html doc:
 
     ```html
-    <link rel="stylesheet" type="text/css" href="intrasearch_ui.css">
+    <link rel="stylesheet" type="text/css" href="0.intrasearch_ui.css">
+    <link rel="stylesheet" type="text/css" href="2.intrasearch_ui.css">
     <script type="text/javascript" src="intrasearch_ui.js"></script>
+    <script type="text/javascript" src="0.intrasearch_ui.js"></script>
+    <script type="text/javascript" src="2.intrasearch_ui.js"></script>
     <script>
       document.addEventListener('DOMContentLoaded', function() {
         var divID = 'searchContainer';
