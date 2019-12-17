@@ -1,15 +1,7 @@
 import * as queryString from 'query-string';
 
-export function paramString(searchQuery, appliedFilters) {
-  let filterParams = queryString.stringify(appliedFilters, {arrayFormat: 'comma'})
-  return `&q=${searchQuery}&${filterParams}`
-}
-
-
 export function getAppliedFilters(query_string) {
-  // console.log(query_string);
   let {q, ...categories} = queryString.parse(query_string);
-
   let appliedFilters = {};
 
   if (Object.keys(categories).toString() !== "") {
@@ -19,24 +11,26 @@ export function getAppliedFilters(query_string) {
       )
     )  
   }
-  // console.log(appliedFilters);
   return appliedFilters; /* Returns an object containing key/array pairs */
 }
 
-export function updateFilters(event, query_string) {
+export function updateFilters(category, value, query_string) {
   let appliedFilters = getAppliedFilters(query_string);
 
-  const { name, value } = event.target;
-  // console.log(value);
-
-  if ((appliedFilters[name]) && (appliedFilters[name].includes(value))) {
-    appliedFilters[name] = appliedFilters[name].filter(el => el !== value)
-  } else if (appliedFilters[name]) {
-    appliedFilters[name].push(value)
+  if ((appliedFilters[category]) && (appliedFilters[category].includes(value))) {
+    /* The category of the checked box already includes this value, want to remove it */
+    appliedFilters[category] = appliedFilters[category].filter(el => el !== value)
+  } else if (appliedFilters[category]) {
+    /* The category exists in the object, want to add the value to its array */
+    appliedFilters[category].push(value)
   } else {
-    appliedFilters[name] = [value]
-
+    /* Initialize the category's array in the object using the checked box's value */
+    appliedFilters[category] = [value]
   }
-  // console.log(appliedFilters)
+
+  /* Remove categories that are now empty */
+  if (appliedFilters[category].length === 0) {
+    delete appliedFilters[category]
+  }
   return appliedFilters
 } /* Returns new appliedFilters */

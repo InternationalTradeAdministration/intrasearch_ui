@@ -4,6 +4,9 @@ import * as queryString from 'query-string';
 import { getAppliedFilters, updateFilters } from './paramHandlers';
 import { history } from '../../index';
 
+
+const categories_array = ['trade_topics', 'industries', 'countries'];
+
 export const clearFilters = (searchQuery) => {
   document.querySelectorAll('input[type=checkbox]').forEach( el => el.checked = false );
   history.push({ search: `q=${searchQuery}`}); /* effectively clears the filters */
@@ -17,35 +20,32 @@ export const clearFilters = (searchQuery) => {
   }
 }
 
-export const toggleFilter = (event, query_string) => {
-  const { name } = event.target;
-  let newFilters = updateFilters(event, query_string);
+export const toggleFilter = (category, value, query_string) => {
+
+  let newFilters = updateFilters(category, value, query_string);
   
   return (dispatch) => {
     dispatch({ type: actionTypes.LOADING_RESULTS })
 
     let params = queryString.stringify(newFilters, {arrayFormat: 'comma'});
-    // console.log(params)
     let searchQuery = queryString.parse(query_string).q; //want query term from the original string
 
     history.push({ search: `q=${searchQuery}&${params}` });
 
     return fetch(`${config.url}?q=${searchQuery}&${params}&api_key=${config.apiKey}&size=10&offset=0`)
       .then(response => response.json())
-      .then(response => dispatch(updateAggregations(`q=${searchQuery}&${params}`, response, name)));  
+      .then(response => dispatch(updateAggregations(`q=${searchQuery}&${params}`, response, category)));  
   }
 }
 
 export const updateAggregations = (query_string, response, category) => {
-
   return (dispatch) => {
     let aggsToUpdate = [];
-    
-    Object.entries(getAppliedFilters(query_string)).forEach(
-      ([key, value]) => {
+      categories_array.forEach(
+      (cat) => {
         /* add categories to the list if they were not the subject of the toggle, or if the category is/becomes empty */
-        if (( key !== category ) || ( Object.entries(getAppliedFilters(query_string)[key]).toString() === '' )) {
-          aggsToUpdate.push(key)
+        if ( (cat !== category) || ((Object.keys(getAppliedFilters(query_string)))===[]) || (!!(Object.keys(getAppliedFilters(query_string))[cat]) ) ) {
+          aggsToUpdate.push(cat)
         }
       }
     )

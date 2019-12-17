@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { connect } from 'react-redux';
 import * as queryString from 'query-string';
-import { getAppliedFilters } from '../store/actions/paramHandlers';
-import * as actionCreators from '../store/actions/index';
+import Checkbox from './Checkbox';
 require('details-polyfill')
 
 class CheckboxCategory extends Component {
@@ -41,18 +39,6 @@ class CheckboxCategory extends Component {
     );
   }
 
-  handleToggleFilter(event) {
-    this.props.toggleFilter(event, this.props.location.search)
-  }
-  
-  isChecked(item) {
-    if (getAppliedFilters(this.props.location.search)[this.props.category]) {
-      if (getAppliedFilters(this.props.location.search)[this.props.category].includes(item["key"])) {
-        return true
-      } else { return false }
-    }
-  }
-
   render() {
     return (
       <details className="FilterCategory" open>
@@ -61,17 +47,13 @@ class CheckboxCategory extends Component {
       { ((this.props.items.length > this.props.limit) && (!this.state.showAll)) ? (
         this.props.items.sort((a, b) => a["key"] > b["key"] ? 1 : -1).slice(0, this.props.limit).map((item, i) => {
           return (
-            <label key={i}>
-              <input type="checkbox" name={this.props.category} value={item["key"]} key={i} onChange={(event) => this.handleToggleFilter(event)} checked={this.isChecked(item)} /> {item["key"]}: {item["doc_count"]}
-            </label>
+            <Checkbox key={i} category={this.props.category} item={item}/>
           )
         })
       ) : (
         this.props.items.sort((a, b) => a["key"] > b["key"] ? 1 : -1).map((item, i) => {
           return (
-            <label key={i}>
-              <input type="checkbox" name={this.props.category} value={item["key"]} key={i} onChange={(event) => this.handleToggleFilter(event)} checked={this.isChecked(item)} /> {item["key"]}: {item["doc_count"]}
-            </label>
+            <Checkbox key={i} category={this.props.category} item={item}/>
           )
         })
       )}
@@ -82,19 +64,7 @@ class CheckboxCategory extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    resultState: state.resultState,
-  };
-};
-
-const mapDispatchToProps = dispatch => {
-  return {
-    toggleFilter: (event, searchQuery) => dispatch(actionCreators.toggleFilter(event, searchQuery)),
-  }
-}
-
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(CheckboxCategory));
+export default withRouter(CheckboxCategory);
 
 const filterTitles = {
   trade_topics: "Trade Topics",

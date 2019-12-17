@@ -25,7 +25,7 @@ export const history = createHashHistory();
 function renderIntrasearchUI(divID) {
   ReactDOM.render(
     <Provider store={store}>
-      <HashRouter hashType="noslash">
+      <HashRouter hashType="noslash" history={history}>
         <App />
       </HashRouter>
     </Provider>,
