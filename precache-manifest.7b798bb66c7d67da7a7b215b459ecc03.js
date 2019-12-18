@@ -4,7 +4,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "./index.html"
   },
   {
-    "revision": "ced3e374287460ab6ff7",
+    "revision": "6667d09d92621c1dd374",
     "url": "./static/css/0.intrasearch_ui.css"
   },
   {
@@ -12,7 +12,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "./static/css/2.intrasearch_ui.css"
   },
   {
-    "revision": "ced3e374287460ab6ff7",
+    "revision": "6667d09d92621c1dd374",
     "url": "./static/js/0.intrasearch_ui.js"
   },
   {
