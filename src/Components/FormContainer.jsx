@@ -22,8 +22,12 @@ class FormContainer extends Component {
 
   handleSubmit = event => {
     event.preventDefault();
-    this.props.history.push({ search: `q=${this.state.searchQuery}`});
-    // this.props.fetchNewQuery(this.state.searchQuery); /* this would make it fetch twice */
+    if (queryString.parse(this.props.location.search).q === this.state.searchQuery) {
+      /* if we're trying to search again with the same query, trigger the search */
+      this.props.fetchNewQuery(`?q=${this.state.searchQuery}`)
+    } else {
+      this.props.history.push({ search: `q=${this.state.searchQuery}`});
+    }
   }
 
   render() {
@@ -64,7 +68,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    fetchNewQuery: (searchQuery) => dispatch(actionCreators.fetchNewQuery(searchQuery)),
+    fetchNewQuery: (query_string) => dispatch(actionCreators.fetchNewQuery(query_string)),
   }
 }
 

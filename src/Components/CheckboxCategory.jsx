@@ -47,13 +47,13 @@ class CheckboxCategory extends Component {
       { ((this.props.items.length > this.props.limit) && (!this.state.showAll)) ? (
         this.props.items.sort((a, b) => a["key"] > b["key"] ? 1 : -1).slice(0, this.props.limit).map((item, i) => {
           return (
-            <Checkbox key={i} category={this.props.category} item={item}/>
+            <Checkbox key={i} category={this.props.category} item={item} uniqStr={this.props.uniqStr}/>
           )
         })
       ) : (
         this.props.items.sort((a, b) => a["key"] > b["key"] ? 1 : -1).map((item, i) => {
           return (
-            <Checkbox key={i} category={this.props.category} item={item}/>
+            <Checkbox key={i} category={this.props.category} item={item} uniqStr={this.props.uniqStr}/>
           )
         })
       )}

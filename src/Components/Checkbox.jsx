@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { getAppliedFilters } from '../store/actions/paramHandlers';
+import * as queryString from 'query-string';
 import * as actionCreators from '../store/actions/index';
 
 class Checkbox extends Component {
@@ -17,7 +18,6 @@ class Checkbox extends Component {
   handleToggleFilter(event) {
     event.preventDefault();
     const { name, value } = event.target
-    // this.props.toggleFilter(name, value, this.props.location.search)
     this.setState({isChecked: !this.state.isChecked},
       () => { this.props.toggleFilter(name, value, this.props.location.search) }
     )
@@ -30,6 +30,16 @@ class Checkbox extends Component {
       } else { 
         this.setState({ isChecked: false })
       }
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if ( queryString.parse(this.props.location.search).q !== queryString.parse(prevProps.location.search).q ) {
+      /* If we change the query term, reset the checkboxes status */
+      this.setState({ isChecked: false })
+    } else if ((this.props.uniqStr) !== (prevProps.uniqStr)) {
+      /* uniqStr changes when the 'Clear All' button is clicked */
+      this.setState({ isChecked: false })
     }
   }
 
