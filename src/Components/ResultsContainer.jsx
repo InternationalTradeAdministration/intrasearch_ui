@@ -15,7 +15,7 @@ class ResultsContainer extends Component {
   getQueryTerm = () => queryString.parse(this.props.location.search).q;
 
   handlePageChange(pageNumber) {
-    this.props.fetchNewPage(this.props.location.search, pageNumber)  // `?q=retail&countries=Andorra`
+    this.props.fetchNewPage(this.props.location.search, pageNumber)
   };
 
   componentDidMount() {
@@ -29,9 +29,8 @@ class ResultsContainer extends Component {
   }
 
   render() {
-    // console.log(this.getQueryTerm());
-    // console.log(this.props.location.search)
-    // console.log(queryString.parse(this.props.location.search))
+    // console.log('🍎', this.props.location.search) // `?q=banks&industries=Agribusiness,Automotive`
+    // console.log('🍏', queryString.parse(this.props.location.search)) // { industries: "Agribusiness,Automotive", q: "banks" }
     return (
       <div className="ResultsContainer">
 
@@ -41,7 +40,7 @@ class ResultsContainer extends Component {
           type='text' 
           showLoadingAnimation={true} 
           ready={!this.props.resultState.loading} 
-          rows={6} style={{ width: 250, margin: '2em 0 0.5em 1em' }} color='#E0E0E0'
+          rows={6} style={{ width: '60vw', margin: '2em 0 0.5em 1em' }} color='#E0E0E0'
         >
 
           <ResultsList searchQuery={this.getQueryTerm()} total={this.props.resultState.total} results={this.props.resultState.results}/>

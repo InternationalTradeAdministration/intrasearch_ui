@@ -7,30 +7,29 @@ import * as actionCreators from '../store/actions/index';
 class Checkbox extends Component {
   constructor(props) {
     super(props)
-    // this.state = {
-    //   isChecked: false,
-    // }
+    this.state = {
+      isChecked: false,
+    }
     this.handleToggleFilter = this.handleToggleFilter.bind(this);
-    this.isChecked = this.isChecked.bind(this);
   }
 
 
   handleToggleFilter(event) {
     event.preventDefault();
-
     const { name, value } = event.target
-    // console.log(`zero ${name}: ${value}`)
-    this.props.toggleFilter(name, value, this.props.location.search)
-    // this.setState({isChecked: !this.state.isChecked},
-    //   () => { this.props.toggleFilter(name, value, this.props.location.search) }
-    // )
+    // this.props.toggleFilter(name, value, this.props.location.search)
+    this.setState({isChecked: !this.state.isChecked},
+      () => { this.props.toggleFilter(name, value, this.props.location.search) }
+    )
   }
-  
-  isChecked(item) {
+
+  componentDidMount() {
     if (getAppliedFilters(this.props.location.search)[this.props.category]) {
-      if (getAppliedFilters(this.props.location.search)[this.props.category].includes(item["key"])) {
-        return true
-      } else { return false }
+      if (getAppliedFilters(this.props.location.search)[this.props.category].includes(this.props.item["key"])) {
+        this.setState({ isChecked: true })
+      } else { 
+        this.setState({ isChecked: false })
+      }
     }
   }
 
@@ -39,7 +38,7 @@ class Checkbox extends Component {
     const value = item["key"];
     return (
       <label key={key}>
-        <input type="checkbox" name={category} value={value} key={key} onChange={(event) => this.handleToggleFilter(event)} checked={this.isChecked(item)} /> {value}: {item["doc_count"]}
+        <input type="checkbox" name={category} value={value} key={key} onChange={(event) => this.handleToggleFilter(event)} checked={this.state.isChecked} /> {value}: {item["doc_count"]}
       </label>
     )
   }
@@ -47,7 +46,7 @@ class Checkbox extends Component {
 
 const mapDispatchToProps = dispatch => {
   return {
-    toggleFilter: (category, value, searchQuery) => dispatch(actionCreators.toggleFilter(category, value, searchQuery)),
+    toggleFilter: (category, value, query_string) => dispatch(actionCreators.toggleFilter(category, value, query_string)),
   }
 }
 

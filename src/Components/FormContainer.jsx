@@ -33,10 +33,11 @@ class FormContainer extends Component {
 
     return (
       <div>
-        { queryTerm ? (
-          <p className="searchMessage">Search Results for <strong className="searchMessageKeyword">{queryTerm}</strong></p>
-        ) : null }
         <form onSubmit={(event) => this.handleSubmit(event)}>
+          { queryTerm ? (
+            <p className="searchMessage">Search Results for <strong className="searchMessageKeyword">{queryTerm}</strong></p>
+          ) : null }
+
           <input
             type="text" 
             name="searchQuery"

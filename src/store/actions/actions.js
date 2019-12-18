@@ -4,9 +4,6 @@ import * as queryString from 'query-string';
 import { getAppliedFilters, updateFilters } from './paramHandlers';
 import { history } from '../../index';
 
-
-const categories_array = ['trade_topics', 'industries', 'countries'];
-
 export const clearFilters = (searchQuery) => {
   document.querySelectorAll('input[type=checkbox]').forEach( el => el.checked = false );
   history.push({ search: `q=${searchQuery}`}); /* effectively clears the filters */
@@ -41,15 +38,17 @@ export const toggleFilter = (category, value, query_string) => {
 export const updateAggregations = (query_string, response, category) => {
   return (dispatch) => {
     let aggsToUpdate = [];
-      categories_array.forEach(
+    const categories_array = ['trade_topics', 'industries', 'countries'];
+
+    categories_array.forEach(
       (cat) => {
         /* add categories to the list if they were not the subject of the toggle, or if the category is/becomes empty */
-        if ( (cat !== category) || ((Object.keys(getAppliedFilters(query_string)))===[]) || (!!(Object.keys(getAppliedFilters(query_string))[cat]) ) ) {
+        if ( (cat !== category) || ((Object.keys(getAppliedFilters(query_string)))===[]) || (!(getAppliedFilters(query_string)[cat])) ) {
+          console.log(`Updating ${cat}!`)
           aggsToUpdate.push(cat)
         }
       }
     )
-
     dispatch({ type: actionTypes.FETCH_WITH_FILTERS, response: response });
     
     aggsToUpdate.forEach(agg => {
