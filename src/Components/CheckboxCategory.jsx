@@ -40,26 +40,28 @@ class CheckboxCategory extends Component {
   }
 
   render() {
+    const itemArray = this.props.items.sort((a, b) => a["key"] > b["key"] ? 1 : -1).map(i => i["key"]);
+    const uniqItemArray = [...new Set(itemArray)]
+    // console.log('uniqItemArray', uniqItemArray);
     return (
       <details className="FilterCategory" open>
       <summary>{filterTitles[this.props.category]}</summary>
 
-      { ((this.props.items.length > this.props.limit) && (!this.state.showAll)) ? (
-        this.props.items.sort((a, b) => a["key"] > b["key"] ? 1 : -1).slice(0, this.props.limit).map((item, i) => {
+      { ((uniqItemArray.length > this.props.limit) && (!this.state.showAll)) ? (
+        uniqItemArray.slice(0, this.props.limit).map((item, i) => {
           return (
             <Checkbox key={i} category={this.props.category} item={item} uniqStr={this.props.uniqStr}/>
           )
         })
       ) : (
-        this.props.items.sort((a, b) => a["key"] > b["key"] ? 1 : -1).map((item, i) => {
+        uniqItemArray.map((item, i) => {
           return (
             <Checkbox key={i} category={this.props.category} item={item} uniqStr={this.props.uniqStr}/>
           )
         })
       )}
-      {this.toggleShowButton(this.props.items.length)}
+      {this.toggleShowButton(uniqItemArray.length)}
       </details>
-
     )
   }
 }

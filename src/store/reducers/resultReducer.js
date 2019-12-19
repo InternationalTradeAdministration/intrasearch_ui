@@ -35,11 +35,14 @@ const resultReducer = (state = initialState, action) => {
         results: action.response.results,
       }
     case actionTypes.UPDATE_SOME_AGGREGATIONS:
+      // console.log([action.aggregation], [...action.aggregations[action.aggregation], ...action.existingFilters])
       return {
         ...state,
         aggregations: {
           ...state.aggregations,
-          [action.aggregation]: action.aggregations[action.aggregation]
+          // need to spread in here the currently selected ones
+          [action.aggregation]: [...action.aggregations[action.aggregation], ...action.existingFilters]
+          // [action.aggregation]: action.aggregations[action.aggregation]
         }
       }
     case actionTypes.UPDATE_ALL_AGGREGATIONS:

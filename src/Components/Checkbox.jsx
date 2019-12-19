@@ -25,7 +25,8 @@ class Checkbox extends Component {
 
   componentDidMount() {
     if (getAppliedFilters(this.props.location.search)[this.props.category]) {
-      if (getAppliedFilters(this.props.location.search)[this.props.category].includes(this.props.item["key"])) {
+      // if (getAppliedFilters(this.props.location.search)[this.props.category].includes(this.props.item["key"])) {
+      if (getAppliedFilters(this.props.location.search)[this.props.category].includes(this.props.item)) {
         this.setState({ isChecked: true })
       } else { 
         this.setState({ isChecked: false })
@@ -45,10 +46,10 @@ class Checkbox extends Component {
 
   render() {
     const { key, category, item } = this.props;
-    const value = item["key"];
+    // const value = item["key"];
     return (
       <label key={key}>
-        <input type="checkbox" name={category} value={value} key={key} onChange={(event) => this.handleToggleFilter(event)} checked={this.state.isChecked} /> {value}: {item["doc_count"]}
+        <input type="checkbox" name={category} value={item} key={key} onChange={(event) => this.handleToggleFilter(event)} checked={this.state.isChecked} /> {item}
       </label>
     )
   }

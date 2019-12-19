@@ -43,7 +43,6 @@ export const updateAggregations = (query_string, response, category) => {
       (cat) => {
         /* add categories to the list if they were not the subject of the toggle, or if the category is/becomes empty */
         if ( (cat !== category) || ((Object.keys(getAppliedFilters(query_string)))===[]) || (!(getAppliedFilters(query_string)[cat])) ) {
-          // console.log(`🔮Updating ${cat}!`)
           aggsToUpdate.push(cat)
         }
       }
@@ -51,7 +50,14 @@ export const updateAggregations = (query_string, response, category) => {
     dispatch({ type: actionTypes.FETCH_WITH_FILTERS, response: response });
     
     aggsToUpdate.forEach(agg => {
-      dispatch({ type: actionTypes.UPDATE_SOME_AGGREGATIONS, aggregations: response.aggregations, aggregation: agg });
+      let existingFilters = []
+      if (getAppliedFilters(query_string)[agg]) {
+        existingFilters = getAppliedFilters(query_string)[agg].map((item) => {
+          return {key: item}
+        })
+        // console.log('🧬existingFilters: ', existingFilters)
+      }
+      dispatch({ type: actionTypes.UPDATE_SOME_AGGREGATIONS, aggregations: response.aggregations, aggregation: agg, existingFilters: existingFilters });
     })
   }
 }

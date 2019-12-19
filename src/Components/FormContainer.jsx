@@ -32,7 +32,7 @@ class FormContainer extends Component {
 
   render() {
     const parsed = queryString.parse(this.props.location.search);
-    // console.log(parsed)
+    // console.log('parsed', parsed)
     const queryTerm = parsed.q;
 
     return (
