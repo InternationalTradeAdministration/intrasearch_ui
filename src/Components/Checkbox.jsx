@@ -16,11 +16,10 @@ class Checkbox extends Component {
 
 
   handleToggleFilter(event) {
-    event.preventDefault();
     const { name, value } = event.target
-    this.setState({isChecked: !this.state.isChecked},
-      () => { this.props.toggleFilter(name, value, this.props.location.search) }
-    )
+    this.setState({isChecked: !this.state.isChecked}, () => { 
+      this.props.toggleFilter(name, value, this.props.location.search)
+    })
   }
 
   componentDidMount() {
