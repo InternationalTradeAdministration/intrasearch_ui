@@ -4,11 +4,11 @@ import 'core-js/stable'; // necessary for IE11 support for Router
 import 'regenerator-runtime/runtime'; // necessary for IE11 support for Router
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { HashRouter } from 'react-router-dom';
+import { Router } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
-import { createHashHistory } from 'history';
+import { createBrowserHistory } from 'history';
 import App from './Components/App';
 import rootReducer from './store/reducers/rootReducer';
 import * as serviceWorker from './serviceWorker';
@@ -20,14 +20,14 @@ const store = createStore(
   composeEnhancers(applyMiddleware(thunk))
 );
 
-export const history = createHashHistory();
+export const history = createBrowserHistory();
 
 function renderIntrasearchUI(divID) {
   ReactDOM.render(
     <Provider store={store}>
-      <HashRouter hashType="noslash" history={history}>
+      <Router history={history}>
         <App />
-      </HashRouter>
+      </Router>
     </Provider>,
     document.getElementById(divID)
   );
