@@ -26,19 +26,26 @@ function FiltersContainer(props) {
     /* It's wierd, I know.  But "document.querySelectorAll('input[type=checkbox]').forEach( el => el.checked = false )" doesn't work because they're controlled components and are not connected to the redux store */
   }
 
+  function filterItemsForMarketIntel(category, items) {
+    if (category === 'types') {
+      return items.filter(obj => obj['key'] === 'market_intelligence')
+    } else { return items }
+  }
+
   function filterCategories() {
     return (
       // eslint-disable-next-line array-callback-return
       listCategories().map((cat, i) => {
         if (props.aggregations[cat].length) {
-          return (<CheckboxCategory category={cat} key={i} items={props.aggregations[cat]} limit={5} uniqStr={uniqStr} />)
+          const items = filterItemsForMarketIntel(cat, props.aggregations[cat])
+          return (<CheckboxCategory category={cat} key={i} items={items} limit={5} uniqStr={uniqStr} />)
         }
       })
     )
   }
 
   return(
-    <div className="FiltersContainer">
+    <div className='FiltersContainer'>
       { (props.aggregations !== {}) ? (
         <>
           <div><h2>Filter Results</h2><button onClick={() => handleClearFilters()}>[Clear All]</button></div>

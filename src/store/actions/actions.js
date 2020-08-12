@@ -37,7 +37,7 @@ export const toggleFilter = (category, value, query_string) => {
 export const updateAggregations = (query_string, response, category) => {
   return (dispatch) => {
     let aggsToUpdate = [];
-    const categories_array = ['trade_topics', 'industries', 'countries'];
+    const categories_array = ['trade_topics', 'industries', 'countries', 'types'];
 
     categories_array.forEach(
       (cat) => {

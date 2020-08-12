@@ -24,7 +24,6 @@ class Checkbox extends Component {
 
   componentDidMount() {
     if (getAppliedFilters(this.props.location.search)[this.props.category]) {
-      // if (getAppliedFilters(this.props.location.search)[this.props.category].includes(this.props.item["key"])) {
       if (getAppliedFilters(this.props.location.search)[this.props.category].includes(this.props.item)) {
         this.setState({ isChecked: true })
       } else { 
@@ -43,12 +42,20 @@ class Checkbox extends Component {
     }
   }
 
+  snakeToTitleCase (snake) {
+    return snake.replace(/([_][a-z])/ig, ($1) => {
+      return $1.toUpperCase()
+        .replace('_', ' ');
+    }).replace(/(^[a-z]{1})/ig, ($1) => {
+      return $1.toUpperCase()
+    })
+  }
+
   render() {
     const { key, category, item } = this.props;
-    // const value = item["key"];
     return (
       <label key={key}>
-        <input type="checkbox" name={category} value={item} key={key} onChange={(event) => this.handleToggleFilter(event)} checked={this.state.isChecked} /> {item}
+        <input type="checkbox" name={category} value={item} key={key} onChange={(event) => this.handleToggleFilter(event)} checked={this.state.isChecked} /> {(category === "types") ? (this.snakeToTitleCase(item)) : (item)}
       </label>
     )
   }
