@@ -7,7 +7,9 @@ import { history } from '../../index';
 export const clearFilters = (searchQuery) => {
   history.push({ search: `q=${searchQuery}`}); /* clear applied filters from the URL */
   return (dispatch) => {
-    return fetch(`${config.url}?q=${searchQuery}&api_key=${config.apiKey}&size=10&offset=0`)
+    return fetch(`${config.url}?q=${searchQuery}&size=10&offset=0`, {
+      headers: { 'Authorization': 'Bearer ' + config.accessToken }
+    })
     .then(response => response.json())
     .then(response => dispatch({ 
       type: actionTypes.FETCH_NEW_QUERY, 
@@ -28,7 +30,9 @@ export const toggleFilter = (category, value, query_string) => {
 
     history.push({ search: `q=${searchQuery}&${params}` });
 
-    return fetch(`${config.url}?q=${searchQuery}&${params}&api_key=${config.apiKey}&size=10&offset=0`)
+    return fetch(`${config.url}?q=${searchQuery}&${params}&size=10&offset=0`, {
+      headers: { 'Authorization': 'Bearer ' + config.accessToken }
+    })
       .then(response => response.json())
       .then(response => dispatch(updateAggregations(`q=${searchQuery}&${params}`, response, category)));
   }
@@ -67,8 +71,11 @@ export const fetchNewQuery = (query_string, activePage=1) => {
   
   return (dispatch) => {
     dispatch({ type: actionTypes.LOADING_RESULTS });
-    
-    return fetch(`${config.url}${query_string}&api_key=${config.apiKey}&size=10&offset=${(activePage-1)*10}`) /* query_string came from `this.props.location.search`, so it already has the leading `?` */
+
+    /* query_string came from `this.props.location.search`, so it already has the leading `?` */
+    return fetch(`${config.url}${query_string}&size=10&offset=${(activePage-1)*10}`, {
+      headers: { 'Authorization': 'Bearer ' + config.accessToken }
+    })
       .then(response => response.json())
       .then(response => dispatch({ 
         type: actionTypes.FETCH_NEW_QUERY, 
@@ -80,8 +87,11 @@ export const fetchNewQuery = (query_string, activePage=1) => {
 export const fetchNewPage = (query_string, pageNumber) => {
   return (dispatch) => {
     dispatch({ type: actionTypes.UPDATE_PAGE_NUMBER, pageNumber: pageNumber });
-    
-    return fetch(`${config.url}${query_string}&api_key=${config.apiKey}&size=10&offset=${(pageNumber-1)*10}`) /* query_string came from `this.props.location.search`, so it already has the leading `?` */
+
+    /* query_string came from `this.props.location.search`, so it already has the leading `?` */
+    return fetch(`${config.url}${query_string}&size=10&offset=${(pageNumber-1)*10}`, {
+      headers: { 'Authorization': 'Bearer ' + config.accessToken }
+    })
       .then(response => response.json())
       .then(response => dispatch({ 
         type: actionTypes.FETCH_NEW_PAGE, 
