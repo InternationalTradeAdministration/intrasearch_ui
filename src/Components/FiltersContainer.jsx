@@ -45,7 +45,7 @@ function FiltersContainer(props) {
   }
 
   return(
-    <div className='FiltersContainer'>
+    <div className='FiltersContainer col-3'>
       { (props.aggregations !== {}) ? (
         <>
           <div><h2>Filter Results</h2><button onClick={() => handleClearFilters()}>[Clear All]</button></div>

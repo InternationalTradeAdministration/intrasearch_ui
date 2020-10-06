@@ -5,7 +5,7 @@ import './styles/ResultsList.scss';
 const ResultsList = (props) => {
 
   return(
-    <div className="ResultsList">
+    <div className="ResultsList col-2of3">
       <p className="totalMessage"><strong>{props.total}</strong> results</p>
       
       { props.results.map(item => {
