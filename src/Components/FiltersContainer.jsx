@@ -9,12 +9,19 @@ require('details-polyfill')
 
 function FiltersContainer(props) {
 
+  const CATEGORIES_ORDER = {
+    'trade_topics': 1,
+    'types': 2,
+    'industries': 3,
+    'countries': 4
+  }
+
   function listCategories() {
     let categories = []
       Object.entries(props.aggregations).forEach(
         ([key, value]) => categories.push(key)
       )
-    return categories
+    return categories.sort((a, b) => CATEGORIES_ORDER[a] > CATEGORIES_ORDER[b] ? 1 : -1)
   }
 
   const [uniqStr, setStr] = useState(0);
@@ -28,7 +35,7 @@ function FiltersContainer(props) {
 
   function filterItemsForMarketIntel(category, items) {
     if (category === 'types') {
-      return items.filter(obj => obj['key'] === 'market_intelligence')
+      return items.filter(obj => obj['value'] === 'market_intelligence')
     } else { return items }
   }
 

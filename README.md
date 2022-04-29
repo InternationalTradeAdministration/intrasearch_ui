@@ -6,6 +6,8 @@ This is a [React](https://facebook.github.io/react/)+[Redux](http://redux.js.org
 Install Node.js (this app was developed with v12.2.0).
 Then, install dependencies with `npm install`.
 
+Update the `url` and `accessToken` in [config.js](src/API/config.js)
+
 Then, `npm run start` runs the app in development mode.<br>
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 

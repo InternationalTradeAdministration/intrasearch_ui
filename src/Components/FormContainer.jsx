@@ -22,11 +22,12 @@ class FormContainer extends Component {
 
   handleSubmit = event => {
     event.preventDefault();
+    let encodedQuery = encodeURIComponent(this.state.searchQuery);
     if (queryString.parse(this.props.location.search).q === this.state.searchQuery) {
       /* if we're trying to search again with the same query, trigger the search */
-      this.props.fetchNewQuery(`?q=${this.state.searchQuery}`)
+      this.props.fetchNewQuery(`?q=${encodedQuery}`);
     } else {
-      this.props.history.push({ search: `q=${this.state.searchQuery}`});
+      this.props.history.push({ search: `q=${encodedQuery}` });
     }
   }
 
@@ -43,7 +44,7 @@ class FormContainer extends Component {
           ) : null }
 
           <input
-            type="text" 
+            type="text"
             name="searchQuery"
             aria-label="Enter search query"
             placeholder="Enter search query"

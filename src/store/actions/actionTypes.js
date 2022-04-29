@@ -4,6 +4,7 @@
 
 /* Result Actions */
 export const SET_SEARCH_QUERY = 'SET_SEARCH_QUERY';
+export const RELOADING_SAME_QUERY = 'RELOADING_SAME_QUERY';
 export const LOADING_RESULTS = 'LOADING_RESULTS';
 export const FETCH_NEW_QUERY = 'FETCH_NEW_QUERY';
 export const FETCH_WITH_FILTERS = 'FETCH_WITH_FILTERS';

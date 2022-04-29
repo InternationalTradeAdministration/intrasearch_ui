@@ -5,14 +5,13 @@ import { getAppliedFilters, updateFilters } from './paramHandlers';
 import { history } from '../../index';
 
 export const clearFilters = (searchQuery) => {
-  history.push({ search: `q=${searchQuery}`}); /* clear applied filters from the URL */
+  let encodedQuery= encodeURIComponent(searchQuery);
+  history.push({ search: `q=${encodedQuery}`}); /* clear applied filters from the URL */
   return (dispatch) => {
-    return fetch(`${config.url}?q=${searchQuery}&size=10&offset=0`, {
-      headers: { 'Authorization': 'Bearer ' + config.accessToken }
-    })
+    return fetchWithQuery(`${config.url}?q=${encodedQuery}&size=10&offset=0`)
     .then(response => response.json())
-    .then(response => dispatch({ 
-      type: actionTypes.FETCH_NEW_QUERY, 
+    .then(response => dispatch({
+      type: actionTypes.FETCH_NEW_QUERY,
       response: response,
     }));
   }
@@ -26,15 +25,14 @@ export const toggleFilter = (category, value, query_string) => {
     dispatch({ type: actionTypes.LOADING_RESULTS })
 
     let params = queryString.stringify(newFilters, {arrayFormat: 'comma'});
-    let searchQuery = queryString.parse(query_string).q; //want query term from the original string
+    let searchQuery = encodeURIComponent(queryString.parse(query_string).q); //want query term from the original string
+    let encodedQueryString = `q=${searchQuery}&${params}`;
 
-    history.push({ search: `q=${searchQuery}&${params}` });
+    history.push({ search: encodedQueryString });
 
-    return fetch(`${config.url}?q=${searchQuery}&${params}&size=10&offset=0`, {
-      headers: { 'Authorization': 'Bearer ' + config.accessToken }
-    })
+    return fetchWithQuery(`${config.url}?${encodedQueryString}&size=10&offset=0`)
       .then(response => response.json())
-      .then(response => dispatch(updateAggregations(`q=${searchQuery}&${params}`, response, category)));
+      .then(response => dispatch(updateAggregations(encodedQueryString, response, category)));
   }
 }
 
@@ -52,14 +50,13 @@ export const updateAggregations = (query_string, response, category) => {
       }
     )
     dispatch({ type: actionTypes.FETCH_WITH_FILTERS, response: response });
-    
+
     aggsToUpdate.forEach(agg => {
       let existingFilters = []
       if (getAppliedFilters(query_string)[agg]) {
         existingFilters = getAppliedFilters(query_string)[agg].map((item) => {
-          return {key: item}
+          return {value: item}
         })
-        // console.log('🧬existingFilters: ', existingFilters)
       }
       dispatch({ type: actionTypes.UPDATE_SOME_AGGREGATIONS, aggregations: response.aggregations, aggregation: agg, existingFilters: existingFilters });
     })
@@ -67,18 +64,15 @@ export const updateAggregations = (query_string, response, category) => {
 }
 
 export const fetchNewQuery = (query_string, activePage=1) => {
-  document.querySelectorAll('input[type=checkbox]').forEach( el => el.checked = false );
-  
+  history.push({ search: query_string });
   return (dispatch) => {
-    dispatch({ type: actionTypes.LOADING_RESULTS });
+    dispatch({ type: actionTypes.RELOADING_SAME_QUERY });
 
     /* query_string came from `this.props.location.search`, so it already has the leading `?` */
-    return fetch(`${config.url}${query_string}&size=10&offset=${(activePage-1)*10}`, {
-      headers: { 'Authorization': 'Bearer ' + config.accessToken }
-    })
+    return fetchWithQuery(`${config.url}${query_string}&size=10&offset=${(activePage-1)*10}`)
       .then(response => response.json())
-      .then(response => dispatch({ 
-        type: actionTypes.FETCH_NEW_QUERY, 
+      .then(response => dispatch({
+        type: actionTypes.FETCH_NEW_QUERY,
         response: response,
       }));
   }
@@ -89,13 +83,17 @@ export const fetchNewPage = (query_string, pageNumber) => {
     dispatch({ type: actionTypes.UPDATE_PAGE_NUMBER, pageNumber: pageNumber });
 
     /* query_string came from `this.props.location.search`, so it already has the leading `?` */
-    return fetch(`${config.url}${query_string}&size=10&offset=${(pageNumber-1)*10}`, {
-      headers: { 'Authorization': 'Bearer ' + config.accessToken }
-    })
+    return fetchWithQuery(`${config.url}${query_string}&size=10&offset=${(pageNumber-1)*10}`)
       .then(response => response.json())
-      .then(response => dispatch({ 
-        type: actionTypes.FETCH_NEW_PAGE, 
+      .then(response => dispatch({
+        type: actionTypes.FETCH_NEW_PAGE,
         response: response,
       }));
   }
+}
+
+export const fetchWithQuery = (query) => {
+  return fetch(query, {
+    headers: { 'subscription-key': config.accessToken }
+  })
 }

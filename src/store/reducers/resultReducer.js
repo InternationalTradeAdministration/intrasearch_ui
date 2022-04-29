@@ -12,10 +12,18 @@ const initialState = {
 const resultReducer = (state = initialState, action) => {
   switch (action.type) {
 
+    case actionTypes.RELOADING_SAME_QUERY:
+      return {
+        ...state,
+        loading: true,
+        aggregations: {},
+        activePage: 1
+      }
     case actionTypes.LOADING_RESULTS:
-      return { 
-        ...state, 
-        loading: true, 
+      return {
+        ...state,
+        loading: true,
+        activePage: 1
       }
     case actionTypes.FETCH_NEW_QUERY:
       return {
@@ -24,7 +32,8 @@ const resultReducer = (state = initialState, action) => {
         total: action.response.total,
         offset: action.response.offset,
         results: action.response.results,
-        aggregations: action.response.aggregations
+        aggregations: action.response.aggregations,
+        activePage: 1
       }
     case actionTypes.FETCH_WITH_FILTERS:
       return {
@@ -36,12 +45,13 @@ const resultReducer = (state = initialState, action) => {
       }
     case actionTypes.UPDATE_SOME_AGGREGATIONS:
       // console.log([action.aggregation], [...action.aggregations[action.aggregation], ...action.existingFilters])
+      state.aggregations[action.aggregation] = action.aggregations[action.aggregation]
       return {
         ...state,
         aggregations: {
           ...state.aggregations,
           // need to spread in here the currently selected ones
-          [action.aggregation]: [...action.aggregations[action.aggregation], ...action.existingFilters]
+          // [action.aggregation]: [...action.aggregations[action.aggregation], ...action.existingFilters]
           // [action.aggregation]: action.aggregations[action.aggregation]
         }
       }
@@ -61,7 +71,7 @@ const resultReducer = (state = initialState, action) => {
         ...state,
         loading: false,
         offset: action.response.offset,
-        results: action.response.results,
+        results: action.response.results
       }
     default:
       return state;

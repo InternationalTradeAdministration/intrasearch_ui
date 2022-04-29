@@ -14,17 +14,21 @@ class ResultsContainer extends Component {
 
   getQueryTerm = () => queryString.parse(this.props.location.search).q;
 
+  maxTotal() {
+    return this.props.resultState.total > 1000 ? 1000 : this.props.resultState.total;
+  }
+
   handlePageChange(pageNumber) {
     this.props.fetchNewPage(this.props.location.search, pageNumber)
   };
 
   componentDidMount() {
-    this.props.fetchNewQuery(this.props.location.search, this.props.resultState.activePage)
+    this.props.fetchNewQuery(this.props.location.search)
   }
-  
+
   componentDidUpdate(prevProps, prevState) {
     if (queryString.parse(this.props.location.search).q !== queryString.parse(prevProps.location.search).q) {
-      this.props.fetchNewQuery(this.props.location.search, this.props.resultState.activePage)
+      this.props.fetchNewQuery(this.props.location.search)
     }
   }
 
@@ -36,10 +40,10 @@ class ResultsContainer extends Component {
 
         <FiltersContainer aggregations={this.props.resultState.aggregations}/>
 
-        <ReactPlaceholder 
-          type='text' 
-          showLoadingAnimation={true} 
-          ready={!this.props.resultState.loading} 
+        <ReactPlaceholder
+          type='text'
+          showLoadingAnimation={true}
+          ready={!this.props.resultState.loading}
           rows={6} style={{ width: '60vw', margin: '2em 0 0.5em 1em' }} color='#E0E0E0'
         >
 
@@ -48,9 +52,9 @@ class ResultsContainer extends Component {
         </ReactPlaceholder>
 
         { (this.props.resultState.total > 0) ? (
-          <Pagination 
+          <Pagination
             activePage={this.props.resultState.activePage}
-            totalItemsCount={this.props.resultState.total}
+            totalItemsCount={this.maxTotal()}
             itemsCountPerPage={10}
             firstPageText="<<"
             prevPageText="<"
@@ -72,7 +76,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    fetchNewQuery: (query_string, activePage) => dispatch(actionCreators.fetchNewQuery(query_string, activePage)),
+    fetchNewQuery: (query_string) => dispatch(actionCreators.fetchNewQuery(query_string)),
     fetchNewPage: (query_string, pageNumber) => dispatch(actionCreators.fetchNewPage(query_string, pageNumber))
   }
 }
