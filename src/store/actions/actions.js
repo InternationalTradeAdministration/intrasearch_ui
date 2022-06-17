@@ -94,6 +94,9 @@ export const fetchNewPage = (query_string, pageNumber) => {
 
 export const fetchWithQuery = (query) => {
   return fetch(query, {
-    headers: { 'subscription-key': config.accessToken }
+    headers: {
+      'subscription-key': config.accessToken,
+      'Cache-Control': 'no-cache'
+    }
   })
 }
